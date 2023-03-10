@@ -1,0 +1,15 @@
+version: "1"
+packages:
+  - name: "db" # name of the package to be generated
+    path: "./db/sqlc" # path to store generated sqlc files
+    queries: "./db/query/" # loaction of sql queries for sqlc
+    schema: "./db/migration/" # path to schema/migration files
+    engine: "postgresql"
+    # Here we set the emit_json_tags to true because we want sqlc to add JSON tags to the generated structs.
+    emit_json_tags: true
+    # The emit_prepared_queries tells sqlc to generate codes that work with prepared statement. At the moment, we don’t need to optimize performance yet, so let’s set this to false to make it simple.
+    emit_prepared_queries: false
+    # Then the emit_interface option to tell sqlc to generate Querier interface for the generated package. It might be useful later if we want to mock the db for testing higher-level functions
+    emit_interface: false
+    # The final option is emit_exact_table_names. By default, this value is false. Sqlc will try to singularize the table name to use as the model struct name. For example accounts table will become Account struct. If you set this option to true, the struct name will be Accounts instead. I think singular name is better because 1 object of type Accounts in plural form might be confused as multiple objects.
+    emit_exact_table_names: false
