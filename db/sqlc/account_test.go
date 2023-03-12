@@ -17,15 +17,20 @@ const (
 	dbSource = "postgresql://root:secret@localhost:5432/simple_bank?sslmode=disable"
 )
 
-var testQueries *Queries
+var (
+	testQueries *Queries
+	testConn    *sql.DB
+)
 
+// Will be run before or after any other test functions.
 func TestMain(m *testing.M) {
-	conn, err := sql.Open(dbDriver, dbSource)
+	var err error
+	testConn, err = sql.Open(dbDriver, dbSource)
 	if err != nil {
-		log.Fatal("cannot connect to db:", err)
+		log.Fatalf("Cannot connect to db: %v", err)
 	}
 
-	testQueries = New(conn)
+	testQueries = New(testConn)
 
 	os.Exit(m.Run())
 }
