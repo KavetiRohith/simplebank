@@ -12,11 +12,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-const (
-	dbDriver = "postgres"
-	dbSource = "postgresql://root:secret@localhost:5432/simple_bank?sslmode=disable"
-)
-
 var (
 	testQueries *Queries
 	testConn    *sql.DB
@@ -24,10 +19,14 @@ var (
 
 // Will be run before or after any other test functions.
 func TestMain(m *testing.M) {
-	var err error
-	testConn, err = sql.Open(dbDriver, dbSource)
+	config, err := util.LoadConfig("../..")
 	if err != nil {
-		log.Fatalf("Cannot connect to db: %v", err)
+		log.Fatal("cannot load config:", err)
+	}
+
+	testConn, err = sql.Open(config.DBDriver, config.DBSource)
+	if err != nil {
+		log.Fatal("cannot connect to db:", err)
 	}
 
 	testQueries = New(testConn)
