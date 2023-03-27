@@ -13,3 +13,5 @@ packages:
     emit_interface: false
     # The final option is emit_exact_table_names. By default, this value is false. Sqlc will try to singularize the table name to use as the model struct name. For example accounts table will become Account struct. If you set this option to true, the struct name will be Accounts instead. I think singular name is better because 1 object of type Accounts in plural form might be confused as multiple objects.
     emit_exact_table_names: false
+    # emits empty slices for listing queries instead of the go zero value for slice i.e. nil
+    emit_empty_slices: true
